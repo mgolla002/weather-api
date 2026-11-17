@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "weather-api"
+version = "1.0.0"
+description = "Sample weather API"
+requires-python = ">=3.10"
+dependencies = ["flask"]
+
+[tool.setuptools]
+packages = ["weather"]
