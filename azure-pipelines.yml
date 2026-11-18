@@ -23,7 +23,7 @@ stages:
 
     - script: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt build twine
+        pip install -r requirements-dev.txt build twine
       displayName: Install dependencies
 
     - script: pytest -q

@@ -1,0 +1,27 @@
+trigger: none
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  - group: jfrog-vars
+
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.12'
+
+- script: |
+    pip install weather-api \
+      --index-url https://$(JFROG_USER):$(JFROG_TOKEN)@$(JFROG_URL)/artifactory/api/pypi/pypl-local/simple \
+      --extra-index-url https://pypi.org/simple
+    pip show weather-api
+  displayName: PULL wheel from JFrog
+
+- script: |
+    echo "$(JFROG_TOKEN)" | docker login $(JFROG_URL) -u $(JFROG_USER) --password-stdin
+    docker pull $(JFROG_URL)/docker-trial/weather-api:latest
+    docker run -d -p 8000:8000 --name wx $(JFROG_URL)/docker-trial/weather-api:latest
+    sleep 8
+    curl http://localhost:8000/weather/dallas
+  displayName: PULL image from JFrog and run it
